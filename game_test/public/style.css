@@ -24,7 +24,7 @@ kbd {
 .back-btn:hover { color: #fff; border-color: #555; }
 
 /* ── Hall ── */
-#hall { display:flex; align-items:center; justify-content:center; width:100%; min-height:100vh; }
+#hall, #snake-config { display:flex; align-items:center; justify-content:center; width:100%; min-height:100vh; }
 .hall-box {
   background:#14141f; border:1px solid #2a2a3f; border-radius:16px;
   padding:36px 32px; min-width:480px; max-width:520px;
@@ -120,9 +120,15 @@ kbd {
   padding:6px 16px; font-size:.82rem; cursor:pointer; transition:background .2s;
 }
 .btn-secondary:hover { background:#666; }
+.kick-btn {
+  margin-left:auto; background:transparent; color:#e74c3c;
+  border:1px solid #e74c3c; border-radius:4px; padding:2px 8px;
+  font-size:.7rem; cursor:pointer; transition:all .2s;
+}
+.kick-btn:hover { background:#e74c3c; color:#fff; }
 
 /* ── Game screen ── */
-#game-screen { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding-top:20px; }
+#game-screen { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding-top:20px; position:relative; }
 #timer-bar-wrap {
   width:90%; max-width:1100px; height:6px; background:#1a1a28; border-radius:3px;
   margin-bottom:10px; position:relative; overflow:hidden;
@@ -144,6 +150,16 @@ kbd {
 .panel h3 { font-size:.78rem; color:#888; margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px; }
 .panel p { font-size:.82rem; color:#ccc; line-height:1.5; }
 .panel .small { font-size:.72rem; color:#666; }
+
+#powerup-list { list-style:none; font-size:.8rem; }
+
+/* Sprint cooldown */
+#sprint-cooldown {
+  position:absolute; top:44px; left:50%; transform:translateX(-50%);
+  background:rgba(231,76,60,.85); color:#fff; padding:4px 16px;
+  border-radius:20px; font-size:.8rem; font-weight:600;
+  pointer-events:none; white-space:nowrap; z-index:5;
+}
 
 /* Sprint */
 #sprint-indicator {
@@ -209,23 +225,52 @@ kbd {
 .ddz-table {
   width:100%; min-height:100vh; position:relative;
   background:linear-gradient(135deg,#0d5c2e,#0a4a25,#0d5c2e);
-  display:flex; flex-direction:column; align-items:center; padding:60px 20px 20px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:100px 20px 20px;
   font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+/* Oval table decoration */
+.ddz-table::before {
+  content:''; position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-55%);
+  width:min(75vw,560px);
+  height:min(65vh,460px);
+  border:1.5px solid rgba(255,255,255,.07);
+  border-radius:50%;
+  pointer-events:none;
 }
 
 /* ── Player info ── */
 .ddz-top-info {
-  display:flex; justify-content:center; gap:20px; width:100%;
-  max-width:700px; margin-bottom:10px;
+  position:absolute; inset:0;
+  pointer-events:none;
 }
 .ddz-player-info {
-  flex:1; max-width:200px;
-  background:rgba(0,0,0,.35); border:2px solid rgba(255,255,255,.1);
-  border-radius:10px; padding:8px 12px; text-align:center;
-  transition:all .3s; position:relative;
+  position:absolute;
+  pointer-events:auto;
+  width:160px;
+  background:rgba(0,0,0,.45); border:2px solid rgba(255,255,255,.12);
+  border-radius:12px; padding:10px 14px; text-align:center;
+  transition:all .3s;
 }
-.ddz-player-info.active { border-color:#f39c12; box-shadow:0 0 16px rgba(243,156,18,.4); }
-.ddz-p-name { font-size:.82rem; font-weight:600; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ddz-player-info.active { border-color:#f39c12; box-shadow:0 0 24px rgba(243,156,18,.5); }
+#ddz-p0 { top:50%; left:4%; transform:translateY(-50%); }
+#ddz-p1 { top:50%; right:4%; transform:translateY(-50%); }
+#ddz-p2 { top:18px; left:50%; transform:translateX(-50%); }
+.ddz-player-cards {
+  position:absolute; display:flex; gap:2px; z-index:2;
+  pointer-events:none; white-space:nowrap;
+}
+.ddz-player-cards.pass {
+  font-size:.7rem; color:#888; font-weight:600;
+  background:rgba(0,0,0,.3); padding:2px 10px; border-radius:8px;
+}
+#ddz-cards-0 { top:50%; left:calc(4% + 170px); transform:translateY(-50%) scale(0.65); transform-origin:left center; }
+#ddz-cards-1 { top:50%; right:calc(4% + 170px); transform:translateY(-50%) scale(0.65); transform-origin:right center; flex-direction:row-reverse; }
+#ddz-cards-2 { top:95px; left:50%; transform:translateX(-50%) scale(0.65); transform-origin:top center; }
+.ddz-p-name { font-size:.85rem; font-weight:600; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .ddz-p-count { font-size:.7rem; color:#aaa; margin-top:2px; }
 .ddz-p-landlord {
   position:absolute; top:-8px; right:-8px;
@@ -233,6 +278,14 @@ kbd {
   padding:2px 8px; border-radius:8px; white-space:nowrap;
   box-shadow:0 2px 6px rgba(0,0,0,.4);
 }
+.ddz-p-auto {
+  display:inline-block; margin-top:4px; padding:2px 10px;
+  font-size:.65rem; border-radius:6px; cursor:pointer;
+  border:1px solid #f39c12; color:#f39c12; background:transparent;
+  transition:all .2s;
+}
+.ddz-p-auto:hover { background:rgba(243,156,18,.15); }
+.ddz-p-auto.active { background:rgba(243,156,18,.2); color:#fff; }
 .ddz-p-cards-count {
   display:inline-block; background:rgba(255,255,255,.1);
   padding:1px 8px; border-radius:8px; font-size:.7rem; color:#ddd; margin-top:3px;
@@ -241,27 +294,32 @@ kbd {
 /* ── Bottom cards (face down / reveal) ── */
 .ddz-bottom-cards {
   display:flex; gap:8px; justify-content:center; align-items:center;
-  margin:8px 0; min-height:76px;
+  margin:8px 0; min-height:76px; z-index:1;
 }
 
 /* ── Play area ── */
 .ddz-play-area {
-  min-height:100px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:6px;
-  margin:8px 0; width:100%; max-width:600px;
+  min-height:120px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:8px;
+  margin:8px 0; width:90%; max-width:500px;
+  background:rgba(0,0,0,.12); border-radius:12px; padding:16px;
+  z-index:1;
 }
-.ddz-play-hint { font-size:.8rem; color:rgba(255,255,255,.4); }
-.ddz-play-name { font-size:.75rem; color:rgba(255,255,255,.7); font-weight:600; }
+.ddz-play-hint { font-size:.85rem; color:rgba(255,255,255,.4); }
+.ddz-play-name { font-size:.78rem; color:rgba(255,255,255,.7); font-weight:600; }
 .ddz-play-cards { display:flex; gap:4px; justify-content:center; flex-wrap:wrap; }
 
 /* ── My hand ── */
 .ddz-my-hand {
   display:flex; justify-content:center; gap:0; flex-wrap:wrap;
-  padding:12px 20px; min-height:90px; max-width:700px;
-  margin:4px 0 8px;
+  padding:14px 24px; min-height:90px; max-width:700px;
+  margin:6px 0 8px; z-index:1;
+  background:rgba(0,0,0,.15); border-radius:12px;
 }
 
-/* ── Card ── */
+/* ── Actions ── */
+.ddz-actions { z-index:1; }
+.ddz-table > .back-btn:last-child { z-index:1; }
 .ddz-card {
   width:52px; height:74px; border-radius:6px;
   background:#fff; border:1.5px solid #ccc;
@@ -313,3 +371,27 @@ kbd {
 #ddz-result-detail { font-size:1rem; color:#ccc; margin-bottom:12px; }
 .ddz-bottom-reveal { display:flex; gap:6px; justify-content:center; margin:10px 0; }
 .ddz-bottom-reveal .ddz-card { cursor:default; margin-left:0; }
+
+/* ── Bidding ── */
+.ddz-bid-title { font-size:1.1rem; font-weight:700; color:#f39c12; margin-bottom:8px; }
+.ddz-bid-current { font-size:.85rem; color:rgba(255,255,255,.7); margin-bottom:6px; }
+.ddz-bid-history { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; min-height:20px; }
+.ddz-bid-entry { font-size:.82rem; color:#ddd; }
+.ddz-bid-player { font-weight:600; color:#fff; }
+.ddz-bid-action { color:#f39c12; font-weight:600; }
+.ddz-bid-hint { font-size:.85rem; color:rgba(255,255,255,.5); margin-top:4px; }
+.ddz-bid-result-info { font-size:.95rem; color:#ddd; margin-bottom:6px; }
+.ddz-p-bid { font-size:.7rem; color:#f39c12; margin-top:3px; font-weight:600; }
+.ddz-bottom-label { font-size:.75rem; color:rgba(255,255,255,.4); margin:0 4px; }
+
+/* ── Player timer badge ── */
+.ddz-p-timer {
+  display:inline-block; margin-left:6px;
+  background:#f39c12; color:#000; font-size:.65rem; font-weight:700;
+  padding:1px 6px; border-radius:8px; min-width:20px; text-align:center;
+  animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+@keyframes timerPulse {
+  from { opacity: 1; }
+  to { opacity: 0.6; }
+}

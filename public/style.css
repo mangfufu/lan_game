@@ -15,33 +15,33 @@ kbd {
   font-size: 0.8rem; border: 1px solid #444;
 }
 .footnote { color: #555; font-size: 0.75rem; margin-top: 16px; }
+.hint { color: #555; font-size: .85rem; padding: 12px 0; }
+.back-btn {
+  background: transparent; color: #888; border: 1px solid #333;
+  border-radius: 6px; padding: 6px 14px; font-size: .82rem;
+  cursor: pointer; transition: all .2s;
+}
+.back-btn:hover { color: #fff; border-color: #555; }
 
-/* ── Lobby ── */
-#lobby { display:flex; align-items:center; justify-content:center; width:100%; min-height:100vh; }
-.lobby-box {
+/* ── Hall ── */
+#hall, #snake-config { display:flex; align-items:center; justify-content:center; width:100%; min-height:100vh; }
+.hall-box {
   background:#14141f; border:1px solid #2a2a3f; border-radius:16px;
-  padding:36px 32px; min-width:420px; max-width:460px;
+  padding:36px 32px; min-width:480px; max-width:520px;
   box-shadow:0 20px 60px rgba(0,0,0,.5); text-align:center;
 }
-.lobby-box h1 { font-size:2rem; margin-bottom:2px; }
+.hall-box h1 { font-size:2rem; margin-bottom:2px; }
 .subtitle { color:#888; margin-bottom:20px; font-size:.85rem; }
-#lobby input {
+.hall-profile { margin-bottom:20px; }
+#hall input {
   display:block; width:100%; padding:10px 14px; border-radius:8px;
   border:1px solid #333; background:#1a1a28; color:#fff;
-  font-size:.95rem; margin-bottom:16px; outline:none;
-  transition:border-color .2s;
+  font-size:.95rem; margin-bottom:16px; outline:none; transition:border-color .2s;
 }
-#lobby input:focus { border-color:#2ecc71; }
-#join-btn {
-  width:100%; padding:12px; border-radius:8px; border:none;
-  background:#2ecc71; color:#000; font-size:1.05rem; font-weight:600;
-  cursor:pointer; transition:transform .15s, background .2s;
-}
-#join-btn:hover { background:#27ae60; transform:translateY(-1px); }
-#join-btn:active { transform:scale(.98); }
+#hall input:focus { border-color:#2ecc71; }
 
 /* ── Skin ── */
-.skin-section { margin-bottom:16px; text-align:left; }
+.skin-section { text-align:left; }
 .skin-section label { font-size:.8rem; color:#aaa; margin-bottom:6px; display:block; }
 .color-row { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
 .color-swatch {
@@ -53,13 +53,82 @@ kbd {
 .pattern-row { display:flex; gap:6px; margin-bottom:8px; }
 .pattern-btn {
   padding:4px 12px; border-radius:6px; border:1px solid #444;
-  background:#1a1a28; color:#aaa; font-size:.78rem; cursor:pointer;
-  transition:all .2s;
+  background:#1a1a28; color:#aaa; font-size:.78rem; cursor:pointer; transition:all .2s;
 }
 .pattern-btn.active { border-color:#2ecc71; color:#2ecc71; background:#0d2818; }
 
+/* ── Game cards ── */
+.hall-cards { display:flex; gap:12px; margin-bottom:12px; }
+.game-card {
+  flex:1; background:#1a1a28; border:1px solid #2a2a3f; border-radius:12px;
+  padding:20px 16px; cursor:pointer; transition:all .25s; position:relative;
+  text-align:center;
+}
+.game-card:hover { border-color:#2ecc71; transform:translateY(-3px); box-shadow:0 8px 24px rgba(46,204,113,.15); }
+.card-icon { font-size:2.4rem; display:block; margin-bottom:6px; }
+.game-card h2 { font-size:1.05rem; margin-bottom:4px; }
+.game-card p { font-size:.78rem; color:#666; }
+.card-badge {
+  display:inline-block; margin-left:4px;
+  background:#e67e22; color:#000; font-size:.6rem;
+  padding:1px 6px; border-radius:3px; font-weight:700; vertical-align:middle;
+}
+
+/* ── Room pages (doudizhu) ── */
+.room-page {
+  background:#14141f; border:1px solid #2a2a3f; border-radius:16px;
+  padding:28px 32px; min-width:420px; max-width:500px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.room-page-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+.room-page-header h2 { font-size:1.2rem; flex:1; }
+.room-list-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+#room-count { font-size:.82rem; color:#666; }
+.btn-primary {
+  background:#2ecc71; color:#000; border:none; border-radius:8px;
+  padding:8px 20px; font-weight:600; font-size:.85rem; cursor:pointer; transition:background .2s;
+}
+.btn-primary:hover { background:#27ae60; }
+#ddz-room-list { max-height:240px; overflow-y:auto; }
+.room-item {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 12px; border-radius:8px; background:#1a1a28; margin-bottom:6px;
+}
+.room-item:hover { background:#222; }
+.room-item-name { font-size:.88rem; font-weight:500; }
+.room-item-meta { font-size:.75rem; color:#666; margin-top:2px; }
+.room-item-join {
+  background:#3498db; color:#fff; border:none; border-radius:5px;
+  padding:4px 12px; font-size:.78rem; cursor:pointer;
+}
+.room-item-join:hover { background:#2980b9; }
+
+/* ── Doudizhu Room Lobby ── */
+.ddz-room-body { text-align:center; }
+.room-players-section { margin-bottom:20px; }
+.room-players-section h3 { font-size:.9rem; margin-bottom:10px; color:#aaa; }
+#ddz-player-list { list-style:none; }
+#ddz-player-list li {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 12px; background:#1a1a28; border-radius:8px; margin-bottom:6px;
+  font-size:.88rem;
+}
+.ddz-room-actions { display:flex; flex-direction:column; gap:8px; align-items:center; }
+#ddz-waiting-msg { font-size:.82rem; color:#555; }
+.btn-secondary {
+  background:#555; color:#fff; border:none; border-radius:6px;
+  padding:6px 16px; font-size:.82rem; cursor:pointer; transition:background .2s;
+}
+.btn-secondary:hover { background:#666; }
+.kick-btn {
+  margin-left:auto; background:transparent; color:#e74c3c;
+  border:1px solid #e74c3c; border-radius:4px; padding:2px 8px;
+  font-size:.7rem; cursor:pointer; transition:all .2s;
+}
+.kick-btn:hover { background:#e74c3c; color:#fff; }
+
 /* ── Game screen ── */
-#game-screen { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding-top:20px; }
+#game-screen { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding-top:20px; position:relative; }
 #timer-bar-wrap {
   width:90%; max-width:1100px; height:6px; background:#1a1a28; border-radius:3px;
   margin-bottom:10px; position:relative; overflow:hidden;
@@ -82,6 +151,16 @@ kbd {
 .panel p { font-size:.82rem; color:#ccc; line-height:1.5; }
 .panel .small { font-size:.72rem; color:#666; }
 
+#powerup-list { list-style:none; font-size:.8rem; }
+
+/* Sprint cooldown */
+#sprint-cooldown {
+  position:absolute; top:44px; left:50%; transform:translateX(-50%);
+  background:rgba(231,76,60,.85); color:#fff; padding:4px 16px;
+  border-radius:20px; font-size:.8rem; font-weight:600;
+  pointer-events:none; white-space:nowrap; z-index:5;
+}
+
 /* Sprint */
 #sprint-indicator {
   position:absolute; top:10px; left:50%; transform:translateX(-50%);
@@ -94,8 +173,7 @@ kbd {
 /* Score & Player lists */
 #score-list, #player-list { list-style:none; font-size:.8rem; }
 #score-list li, #player-list li {
-  display:flex; align-items:center; gap:4px;
-  padding:3px 0; border-bottom:1px solid #1e1e2f;
+  display:flex; align-items:center; gap:4px; padding:3px 0; border-bottom:1px solid #1e1e2f;
 }
 #score-list li:last-child, #player-list li:last-child { border-bottom:none; }
 .score-rank { color:#555; min-width:20px; }
@@ -109,7 +187,7 @@ kbd {
 .alive .player-status { color:#2ecc71; }
 .dead .player-status { color:#e74c3c; }
 
-/* Death */
+/* Death overlay */
 #death-overlay {
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   background:rgba(0,0,0,.65); border-radius:8px; backdrop-filter:blur(2px);
@@ -139,3 +217,181 @@ kbd {
 .final-rank { color:#555; min-width:24px; }
 .final-name { flex:1; text-align:left; margin-left:6px; }
 .final-score { color:#2ecc71; font-weight:600; }
+
+/* ═══════════════════════════════════════════════════════════
+   DOUDIZHU Game Screen
+   ═══════════════════════════════════════════════════════════ */
+#ddz-game { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.ddz-table {
+  width:100%; min-height:100vh; position:relative;
+  background:linear-gradient(135deg,#0d5c2e,#0a4a25,#0d5c2e);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:100px 20px 20px;
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+/* Oval table decoration */
+.ddz-table::before {
+  content:''; position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-55%);
+  width:min(75vw,560px);
+  height:min(65vh,460px);
+  border:1.5px solid rgba(255,255,255,.07);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+/* ── Player info ── */
+.ddz-top-info {
+  position:absolute; inset:0;
+  pointer-events:none;
+}
+.ddz-player-info {
+  position:absolute;
+  pointer-events:auto;
+  width:160px;
+  background:rgba(0,0,0,.45); border:2px solid rgba(255,255,255,.12);
+  border-radius:12px; padding:10px 14px; text-align:center;
+  transition:all .3s;
+}
+.ddz-player-info.active { border-color:#f39c12; box-shadow:0 0 24px rgba(243,156,18,.5); }
+#ddz-p0 { top:50%; left:4%; transform:translateY(-50%); }
+#ddz-p1 { top:50%; right:4%; transform:translateY(-50%); }
+#ddz-p2 { top:18px; left:50%; transform:translateX(-50%); }
+.ddz-player-cards {
+  position:absolute; display:flex; gap:2px; z-index:2;
+  pointer-events:none; white-space:nowrap;
+}
+.ddz-player-cards.pass {
+  font-size:.7rem; color:#888; font-weight:600;
+  background:rgba(0,0,0,.3); padding:2px 10px; border-radius:8px;
+}
+#ddz-cards-0 { top:50%; left:calc(4% + 170px); transform:translateY(-50%) scale(0.65); transform-origin:left center; }
+#ddz-cards-1 { top:50%; right:calc(4% + 170px); transform:translateY(-50%) scale(0.65); transform-origin:right center; flex-direction:row-reverse; }
+#ddz-cards-2 { top:95px; left:50%; transform:translateX(-50%) scale(0.65); transform-origin:top center; }
+.ddz-p-name { font-size:.85rem; font-weight:600; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ddz-p-count { font-size:.7rem; color:#aaa; margin-top:2px; }
+.ddz-p-landlord {
+  position:absolute; top:-8px; right:-8px;
+  background:#f39c12; color:#000; font-size:.6rem; font-weight:700;
+  padding:2px 8px; border-radius:8px; white-space:nowrap;
+  box-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.ddz-p-auto {
+  display:inline-block; margin-top:4px; padding:2px 10px;
+  font-size:.65rem; border-radius:6px; cursor:pointer;
+  border:1px solid #f39c12; color:#f39c12; background:transparent;
+  transition:all .2s;
+}
+.ddz-p-auto:hover { background:rgba(243,156,18,.15); }
+.ddz-p-auto.active { background:rgba(243,156,18,.2); color:#fff; }
+.ddz-p-cards-count {
+  display:inline-block; background:rgba(255,255,255,.1);
+  padding:1px 8px; border-radius:8px; font-size:.7rem; color:#ddd; margin-top:3px;
+}
+
+/* ── Bottom cards (face down / reveal) ── */
+.ddz-bottom-cards {
+  display:flex; gap:8px; justify-content:center; align-items:center;
+  margin:8px 0; min-height:76px; z-index:1;
+}
+
+/* ── Play area ── */
+.ddz-play-area {
+  min-height:120px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:8px;
+  margin:8px 0; width:90%; max-width:500px;
+  background:rgba(0,0,0,.12); border-radius:12px; padding:16px;
+  z-index:1;
+}
+.ddz-play-hint { font-size:.85rem; color:rgba(255,255,255,.4); }
+.ddz-play-name { font-size:.78rem; color:rgba(255,255,255,.7); font-weight:600; }
+.ddz-play-cards { display:flex; gap:4px; justify-content:center; flex-wrap:wrap; }
+
+/* ── My hand ── */
+.ddz-my-hand {
+  display:flex; justify-content:center; gap:0; flex-wrap:wrap;
+  padding:14px 24px; min-height:90px; max-width:700px;
+  margin:6px 0 8px; z-index:1;
+  background:rgba(0,0,0,.15); border-radius:12px;
+}
+
+/* ── Actions ── */
+.ddz-actions { z-index:1; }
+.ddz-table > .back-btn:last-child { z-index:1; }
+.ddz-card {
+  width:52px; height:74px; border-radius:6px;
+  background:#fff; border:1.5px solid #ccc;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; cursor:pointer; user-select:none;
+  transition:transform .15s, box-shadow .15s, margin-top .15s;
+  font-size:.82rem; position:relative; flex-shrink:0;
+  margin-left:-16px; box-shadow:0 2px 4px rgba(0,0,0,.3);
+}
+.ddz-card:first-child { margin-left:0; }
+.ddz-card:hover { transform:translateY(-4px); box-shadow:0 4px 10px rgba(0,0,0,.4); z-index:2; }
+.ddz-card.selected {
+  transform:translateY(-18px); border-color:#f39c12; border-width:2px;
+  box-shadow:0 6px 16px rgba(243,156,18,.35); z-index:3;
+}
+.ddz-card.back {
+  background:linear-gradient(135deg,#1a3a6b,#2a5a9b);
+  border-color:#0d2a5a; cursor:default;
+  box-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.ddz-card.back::after {
+  content:'🃏'; font-size:1.4rem; opacity:.6;
+}
+.ddz-card-suit { font-size:.7rem; line-height:1; }
+.ddz-card-value { font-size:.9rem; font-weight:700; line-height:1; margin-top:1px; }
+.ddz-card-joker .ddz-card-suit { font-size:.9rem; }
+.ddz-card-joker .ddz-card-value { font-size:.65rem; }
+
+/* ── Actions ── */
+.ddz-actions {
+  display:flex; gap:12px; justify-content:center;
+  padding:8px 0; min-height:44px;
+}
+.ddz-actions .btn-primary { padding:8px 28px; font-size:.9rem; }
+.ddz-actions .back-btn { padding:8px 28px; font-size:.9rem; }
+
+/* ── Game Over ── */
+#ddz-result {
+  position:fixed; inset:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(4px);
+}
+.ddz-result-box {
+  background:#14141f; border:2px solid #f39c12; border-radius:16px;
+  padding:32px 40px; min-width:300px; text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.ddz-result-box h2 { font-size:1.6rem; margin-bottom:6px; }
+#ddz-result-detail { font-size:1rem; color:#ccc; margin-bottom:12px; }
+.ddz-bottom-reveal { display:flex; gap:6px; justify-content:center; margin:10px 0; }
+.ddz-bottom-reveal .ddz-card { cursor:default; margin-left:0; }
+
+/* ── Bidding ── */
+.ddz-bid-title { font-size:1.1rem; font-weight:700; color:#f39c12; margin-bottom:8px; }
+.ddz-bid-current { font-size:.85rem; color:rgba(255,255,255,.7); margin-bottom:6px; }
+.ddz-bid-history { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; min-height:20px; }
+.ddz-bid-entry { font-size:.82rem; color:#ddd; }
+.ddz-bid-player { font-weight:600; color:#fff; }
+.ddz-bid-action { color:#f39c12; font-weight:600; }
+.ddz-bid-hint { font-size:.85rem; color:rgba(255,255,255,.5); margin-top:4px; }
+.ddz-bid-result-info { font-size:.95rem; color:#ddd; margin-bottom:6px; }
+.ddz-p-bid { font-size:.7rem; color:#f39c12; margin-top:3px; font-weight:600; }
+.ddz-bottom-label { font-size:.75rem; color:rgba(255,255,255,.4); margin:0 4px; }
+
+/* ── Player timer badge ── */
+.ddz-p-timer {
+  display:inline-block; margin-left:6px;
+  background:#f39c12; color:#000; font-size:.65rem; font-weight:700;
+  padding:1px 6px; border-radius:8px; min-width:20px; text-align:center;
+  animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+@keyframes timerPulse {
+  from { opacity: 1; }
+  to { opacity: 0.6; }
+}
