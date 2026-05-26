@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>游戏大厅</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ════════ Hall ════════ -->
+<div id="hall">
+  <div class="hall-box">
+    <h1>🎮 游戏大厅</h1>
+    <p class="subtitle">局域网联机游戏平台</p>
+
+    <div class="hall-profile">
+      <input type="text" id="name-input" placeholder="输入你的名字..." maxlength="12" autofocus>
+      <div class="skin-section">
+        <label>🎨 皮肤</label>
+        <div class="color-row" id="color-picker"></div>
+        <div class="pattern-row" id="pattern-picker"></div>
+      </div>
+    </div>
+
+    <div class="hall-cards">
+      <div class="game-card" id="card-snake">
+        <div class="card-icon">🐍</div>
+        <h2>Snake Battle</h2>
+        <p>多人贪吃蛇对战 · 即时加入</p>
+      </div>
+      <div class="game-card" id="card-doudizhu">
+        <div class="card-icon">🃏</div>
+        <h2>斗地主</h2>
+        <p>三人扑克对战<span class="card-badge">BETA</span></p>
+      </div>
+    </div>
+    <p class="footnote">局域网联机 · <span id="lan-ip">localhost:3001</span></p>
+  </div>
+</div>
+
+<!-- ════════ Snake Game ════════ -->
+<div id="game-screen" style="display:none">
+  <div id="timer-bar-wrap">
+    <div id="timer-fill"></div>
+    <span id="timer-text">5:00</span>
+  </div>
+  <div class="game-container">
+    <div class="game-sidebar left-sidebar">
+      <div class="panel"><h3>🎮 操作</h3>
+        <p>方向键 / WASD 移动</p>
+        <p><kbd>空格</kbd> 冲刺 <span class="small">(消耗积分+身长)</span></p>
+      </div>
+      <div class="panel" id="score-panel"><h3>🏆 排行</h3><ul id="score-list"></ul></div>
+    </div>
+    <div class="game-main">
+      <canvas id="game-canvas"></canvas>
+      <div id="sprint-indicator" style="display:none">⚡ 冲刺中</div>
+      <div id="death-overlay" style="display:none">
+        <div class="death-box"><h2>💀 你死了</h2><p id="death-score">得分: 0</p><p class="small">等待复活中...</p></div>
+      </div>
+    </div>
+    <div class="game-sidebar right-sidebar">
+      <div class="panel"><h3>👥 玩家 (<span id="player-count">0</span>)</h3><ul id="player-list"></ul></div>
+      <div class="panel"><h3>ℹ️ 信息</h3><p class="small" id="game-info">—</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ Snake Game Over ════════ -->
+<div id="gameover-overlay" style="display:none">
+  <div class="gameover-box">
+    <h2>🏆 游戏结束</h2>
+    <p id="winner-text"></p>
+    <ul id="final-score-list"></ul>
+    <p class="small">10秒后自动开始新一局...</p>
+    <button class="back-btn" onclick="showHall()" style="margin-top:12px">返回大厅</button>
+  </div>
+</div>
+
+<!-- ════════ Doudizhu Room List ════════ -->
+<div id="ddz-rooms" style="display:none">
+  <div class="room-page">
+    <div class="room-page-header">
+      <button class="back-btn" onclick="showHall()">← 返回大厅</button>
+      <h2>🃏 斗地主 · 房间列表</h2>
+    </div>
+    <div class="room-list-bar">
+      <span id="room-count">0 个房间</span>
+      <button id="ddz-create-btn" class="btn-primary">+ 创建房间</button>
+    </div>
+    <div id="ddz-room-list"><p class="hint">暂无房间，点击「创建房间」</p></div>
+  </div>
+</div>
+
+<!-- ════════ Doudizhu Room Lobby ════════ -->
+<div id="ddz-room" style="display:none">
+  <div class="room-page">
+    <div class="room-page-header">
+      <button class="back-btn" onclick="leaveDDZRoom()">← 返回房间列表</button>
+      <h2 id="ddz-room-title">🃏 房间</h2>
+    </div>
+    <div class="ddz-room-body">
+      <div class="room-players-section">
+        <h3>👥 玩家 (<span id="ddz-player-count">1</span>/3)</h3>
+        <ul id="ddz-player-list"></ul>
+        <p class="hint" id="ddz-waiting-msg">等待其他玩家加入...</p>
+      </div>
+      <div class="ddz-room-actions">
+        <button id="ddz-start-btn" class="btn-primary" style="display:none">开始游戏</button>
+        <button id="ddz-bot-btn" class="btn-secondary" style="display:none">+ 添加Bot</button>
+        <button class="back-btn" onclick="leaveDDZRoom()">离开房间</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ Doudizhu Game Screen ════════ -->
+<div id="ddz-game" style="display:none">
+  <div class="ddz-table">
+    <div class="ddz-top-info">
+      <div class="ddz-player-info" id="ddz-p0"></div>
+      <div class="ddz-player-info" id="ddz-p1"></div>
+      <div class="ddz-player-info" id="ddz-p2"></div>
+    </div>
+    <div class="ddz-bottom-cards" id="ddz-bottom-cards"></div>
+    <div class="ddz-play-area" id="ddz-play-area">
+      <div class="ddz-play-hint" id="ddz-play-hint"></div>
+    </div>
+    <div class="ddz-my-hand" id="ddz-my-hand"></div>
+    <div class="ddz-actions" id="ddz-actions" style="display:none">
+      <button id="ddz-play-btn" class="btn-primary">出牌</button>
+      <button id="ddz-pass-btn" class="back-btn">不出</button>
+    </div>
+    <div id="ddz-result" style="display:none">
+      <div class="ddz-result-box">
+        <h2 id="ddz-result-title"></h2>
+        <p id="ddz-result-detail"></p>
+        <div class="ddz-bottom-reveal" id="ddz-bottom-reveal"></div>
+        <button class="back-btn" onclick="leaveDDZGame()" style="margin-top:12px">返回大厅</button>
+      </div>
+    </div>
+    <button class="back-btn" onclick="leaveDDZGame()" style="position:absolute;top:10px;left:10px">← 退出</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js?v=4"></script>
+</body>
+</html>
